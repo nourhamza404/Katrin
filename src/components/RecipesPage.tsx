@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Clock, Users, ChefHat } from 'lucide-react';
+import { Clock, Users, ChefHat, BookOpen, Star, Sparkles, Heart } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { recipes, Recipe } from '../data/recipesData';
@@ -10,6 +10,7 @@ export default function RecipesPage() {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [email, setEmail] = useState('');
+  const [favoriteRecipes, setFavoriteRecipes] = useState<string[]>([]);
 
   const categories = ['all', 'Kuchen', 'Cookies', 'Cupcakes', 'Cremes & Frostings'];
 
@@ -28,6 +29,19 @@ export default function RecipesPage() {
       });
       setEmail('');
     }
+  };
+
+  const toggleFavorite = (recipeId: string) => {
+    setFavoriteRecipes(prev => 
+      prev.includes(recipeId) 
+        ? prev.filter(id => id !== recipeId)
+        : [...prev, recipeId]
+    );
+    toast.success(
+      favoriteRecipes.includes(recipeId) 
+        ? 'Aus Favoriten entfernt' 
+        : 'Zu Favoriten hinzugefügt'
+    );
   };
 
   const tips = [
@@ -54,22 +68,38 @@ export default function RecipesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-pink-50">
       {/* Header */}
-      <div className="bg-gradient-to-br from-pink-100 to-white py-12">
+      <div className="relative bg-gradient-to-br from-pink-100 via-pink-50 to-white py-16 overflow-hidden">
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 overflow-hidden -z-10">
+          <div className="absolute top-10 right-10 w-72 h-72 bg-pink-300/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 left-10 w-96 h-96 bg-yellow-300/20 rounded-full blur-3xl"></div>
+        </div>
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-pink-600 to-pink-500 text-white px-5 py-2.5 rounded-full text-sm mb-6 shadow-lg"
+          >
+            <BookOpen className="w-4 h-4" />
+            <span className="font-medium">Bewährte Rezepte</span>
+          </motion.div>
+          
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-5xl text-gray-900 mb-4"
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-5xl lg:text-6xl text-gray-900 mb-4"
           >
-            Rezepte & Tipps
+            Rezepte & <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-pink-500">Tipps</span>
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-xl text-gray-600"
+            transition={{ delay: 0.2 }}
+            className="text-xl text-gray-600 max-w-2xl"
           >
             Backe wie ein Profi – mit unseren bewährten Rezepten und Expertentipps
           </motion.p>
@@ -77,22 +107,25 @@ export default function RecipesPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white border-b sticky top-16 z-40">
+      <div className="bg-white/80 backdrop-blur-md border-b border-pink-100 sticky top-16 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           {/* Category Filter */}
-          <div className="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0">
-            {categories.map(category => (
-              <button
+          <div className="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+            {categories.map((category, idx) => (
+              <motion.button
                 key={category}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.05 }}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full whitespace-nowrap transition-colors ${
+                className={`px-6 py-2.5 rounded-full whitespace-nowrap transition-all font-medium ${
                   selectedCategory === category
-                    ? 'bg-pink-600 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-gradient-to-r from-pink-600 to-pink-500 text-white shadow-md scale-105'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
                 }`}
               >
-                {category === 'all' ? 'Alle Rezepte' : category}
-              </button>
+                {category === 'all' ? '✨ Alle Rezepte' : category}
+              </motion.button>
             ))}
           </div>
         </div>
@@ -100,11 +133,17 @@ export default function RecipesPage() {
 
       {/* Recipes Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl text-gray-900">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex items-center justify-between mb-8"
+        >
+          <h2 className="text-3xl text-gray-900 flex items-center gap-3">
+            <Sparkles className="w-8 h-8 text-pink-600" />
             {filteredRecipes.length} {filteredRecipes.length === 1 ? 'Rezept' : 'Rezepte'}
           </h2>
-        </div>
+        </motion.div>
         
         {filteredRecipes.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -113,16 +152,32 @@ export default function RecipesPage() {
                 key={recipe.id} 
                 recipe={recipe}
                 index={index}
+                isFavorite={favoriteRecipes.includes(recipe.id)}
+                onToggleFavorite={() => toggleFavorite(recipe.id)}
                 onClick={() => setSelectedRecipe(recipe)}
               />
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <p className="text-xl text-gray-600">
-              Keine Rezepte gefunden. Versuche einen anderen Suchbegriff.
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-20"
+          >
+            <div className="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <BookOpen className="w-12 h-12 text-pink-600" />
+            </div>
+            <h3 className="text-2xl text-gray-900 mb-2">Keine Rezepte gefunden</h3>
+            <p className="text-gray-600 mb-6">
+              Versuche einen anderen Suchbegriff oder wähle eine andere Kategorie.
             </p>
-          </div>
+            <button
+              onClick={() => setSelectedCategory('all')}
+              className="bg-gradient-to-r from-pink-600 to-pink-500 text-white px-6 py-3 rounded-full hover:from-pink-700 hover:to-pink-600 transition-all hover:scale-105 shadow-lg"
+            >
+              Alle Rezepte anzeigen
+            </button>
+          </motion.div>
         )}
       </section>
 
@@ -216,7 +271,7 @@ export default function RecipesPage() {
   );
 }
 
-function RecipeCard({ recipe, index, onClick }: { recipe: Recipe; index: number; onClick: () => void }) {
+function RecipeCard({ recipe, index, isFavorite, onToggleFavorite, onClick }: { recipe: Recipe; index: number; isFavorite: boolean; onToggleFavorite: () => void; onClick: () => void }) {
   const difficultyColor = {
     'Einfach': 'bg-green-100 text-green-700',
     'Mittel': 'bg-yellow-100 text-yellow-700',
@@ -230,10 +285,9 @@ function RecipeCard({ recipe, index, onClick }: { recipe: Recipe; index: number;
       viewport={{ once: true }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ y: -8 }}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer flex flex-col h-full"
-      onClick={onClick}
+      className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all cursor-pointer flex flex-col h-full relative"
     >
-      <div className="relative h-48 overflow-hidden group flex-shrink-0">
+      <div className="relative h-48 overflow-hidden group flex-shrink-0" onClick={onClick}>
         <ImageWithFallback
           src={recipe.image}
           alt={recipe.title}
@@ -245,9 +299,24 @@ function RecipeCard({ recipe, index, onClick }: { recipe: Recipe; index: number;
         <div className={`absolute top-3 right-3 px-3 py-1 rounded-full text-xs ${difficultyColor[recipe.difficulty]}`}>
           {recipe.difficulty}
         </div>
+        
+        {/* Favorite Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite();
+          }}
+          className={`absolute bottom-3 right-3 w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-lg ${
+            isFavorite 
+              ? 'bg-pink-600 text-white hover:bg-pink-700' 
+              : 'bg-white/90 text-gray-600 hover:bg-white hover:text-pink-600'
+          }`}
+        >
+          <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+        </button>
       </div>
       
-      <div className="p-5 space-y-3 flex flex-col flex-1">
+      <div className="p-5 space-y-3 flex flex-col flex-1" onClick={onClick}>
         <h3 className="text-lg text-gray-900 truncate">{recipe.title}</h3>
         <p className="text-gray-600 text-sm line-clamp-2">{recipe.description}</p>
         
@@ -262,13 +331,13 @@ function RecipeCard({ recipe, index, onClick }: { recipe: Recipe; index: number;
           </div>
           <div className="text-center">
             <div className="w-4 h-4 flex items-center justify-center mx-auto mb-1">
-              <span className="text-pink-600">📊</span>
+              <span className="text-sm">📊</span>
             </div>
             <p className="text-xs text-gray-600">{recipe.difficulty}</p>
           </div>
         </div>
         
-        <button className="w-full bg-pink-600 text-white py-2 rounded-full hover:bg-pink-700 transition-all hover:scale-105 text-sm mt-auto">
+        <button className="w-full bg-gradient-to-r from-pink-600 to-pink-500 text-white py-2.5 rounded-full hover:from-pink-700 hover:to-pink-600 transition-all hover:scale-105 text-sm mt-auto shadow-md">
           Rezept ansehen
         </button>
       </div>

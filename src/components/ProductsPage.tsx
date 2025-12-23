@@ -232,53 +232,75 @@ export default function ProductsPage({ category, addToCart }: ProductsPageProps)
 
       {/* Products Grid/List */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <AnimatePresence mode="wait">
-          {viewMode === 'grid' ? (
-            <motion.div
-              key="grid"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            >
-              {filteredProducts.map((product, idx) => (
-                <ProductCard 
-                  key={product.id} 
-                  product={product} 
-                  addToCart={addToCart}
-                  onQuickView={() => setQuickViewProduct(product)}
-                  delay={idx * 0.05}
-                />
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key="list"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="space-y-4"
-            >
-              {filteredProducts.map((product, idx) => (
-                <ProductListItem 
-                  key={product.id} 
-                  product={product} 
-                  addToCart={addToCart}
-                  onQuickView={() => setQuickViewProduct(product)}
-                  delay={idx * 0.05}
-                />
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {isLoading ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          >
+            {[...Array(8)].map((_, idx) => (
+              <div key={idx} className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse">
+                <div className="h-48 bg-gray-200"></div>
+                <div className="p-5 space-y-3">
+                  <div className="h-6 bg-gray-200 rounded"></div>
+                  <div className="h-4 bg-gray-100 rounded w-3/4"></div>
+                  <div className="h-8 bg-gray-200 rounded mt-4"></div>
+                  <div className="h-10 bg-gray-300 rounded-full mt-4"></div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        ) : (
+          <AnimatePresence mode="wait">
+            {viewMode === 'grid' ? (
+              <motion.div
+                key="grid"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              >
+                {filteredProducts.map((product, idx) => (
+                  <ProductCard 
+                    key={product.id} 
+                    product={product} 
+                    addToCart={addToCart}
+                    onQuickView={() => setQuickViewProduct(product)}
+                    delay={idx * 0.05}
+                  />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="list"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-4"
+              >
+                {filteredProducts.map((product, idx) => (
+                  <ProductListItem 
+                    key={product.id} 
+                    product={product} 
+                    addToCart={addToCart}
+                    onQuickView={() => setQuickViewProduct(product)}
+                    delay={idx * 0.05}
+                  />
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
 
-        {filteredProducts.length === 0 && (
+        {!isLoading && filteredProducts.length === 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-20"
           >
-            <div className="text-6xl mb-4">🔍</div>
+            <div className="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="text-5xl">🔍</div>
+            </div>
             <h3 className="text-2xl text-gray-900 mb-2">Keine Produkte gefunden</h3>
             <p className="text-gray-600 mb-6">
               Versuchen Sie, die Filter anzupassen oder eine andere Kategorie zu wählen.
@@ -288,7 +310,7 @@ export default function ProductsPage({ category, addToCart }: ProductsPageProps)
                 setSelectedCategory('all');
                 setPriceRange([0, 100]);
               }}
-              className="px-6 py-3 bg-pink-600 text-white rounded-full hover:bg-pink-700 transition-all hover:scale-105"
+              className="bg-gradient-to-r from-pink-600 to-pink-500 text-white px-6 py-3 rounded-full hover:from-pink-700 hover:to-pink-600 transition-all hover:scale-105 shadow-lg"
             >
               Alle Filter zurücksetzen
             </button>
@@ -348,7 +370,7 @@ function ProductCard({ product, addToCart, onQuickView, delay }: any) {
     >
       <div className="relative h-56 overflow-hidden flex-shrink-0">
         <ImageWithFallback
-          src={product.image}
+          src={product.image_url || product.image}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
@@ -466,7 +488,7 @@ function ProductListItem({ product, addToCart, onQuickView, delay }: any) {
     >
       <div className="relative w-full md:w-64 h-48 md:h-auto overflow-hidden flex-shrink-0">
         <ImageWithFallback
-          src={product.image}
+          src={product.image_url || product.image}
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />

@@ -299,7 +299,7 @@ app.post('/make-server-48cde07a/send-order-email', async (c) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Katrin Sweets <onboarding@resend.dev>',
+        from: 'Katrinsweets <team@katrinsweets.de>',
         to: [recipientEmail],
         subject: `Bestellbestätigung #${emailData.orderId} - Katrin Sweets`,
         html: emailHtml,
@@ -365,7 +365,7 @@ app.post('/make-server-48cde07a/send-custom-order-email', async (c) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Katrin Sweets <onboarding@resend.dev>',
+        from: 'Katrinsweets <team@katrinsweets.de>',
         to: [emailData.deliveryInfo.email],
         subject: `Anfrage-Bestätigung #${emailData.orderId} - Katrin Sweets`,
         html: emailHtml,
@@ -423,7 +423,7 @@ app.post('/make-server-48cde07a/send-status-update-email', async (c) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Katrin Sweets <onboarding@resend.dev>',
+        from: 'Katrinsweets <team@katrinsweets.de>',
         to: [customerEmail],
         subject: `Status-Update: Bestellung #${orderId} - Katrin Sweets`,
         html: emailHtml,

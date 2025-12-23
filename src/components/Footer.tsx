@@ -112,9 +112,6 @@ export default function Footer() {
           <p className="text-sm text-gray-600">
             © 2025 Katrin Sweets. Alle Rechte vorbehalten.
           </p>
-          <p className="flex items-center gap-2 text-sm text-gray-600">
-            Made with <Heart className="w-4 h-4 text-pink-500 fill-pink-500" /> for sweet lovers
-          </p>
         </div>
       </div>
     </footer>

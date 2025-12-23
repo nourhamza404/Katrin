@@ -371,11 +371,77 @@ function Navigation({
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <span className="text-pink-600">🍰</span>
-            <span className="text-2xl text-pink-600">
-              Katrin Sweets
-            </span>
+          <Link to="/" className="flex items-center space-x-3 group">
+            {/* Beautiful Layered Cake Icon */}
+            <div className="relative">
+              <div className="w-12 h-12 bg-gradient-to-br from-pink-400 via-pink-500 to-rose-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105 group-hover:rotate-3">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 28 28"
+                  fill="none"
+                  className="text-white"
+                >
+                  {/* Candle Flame */}
+                  <path
+                    d="M14 2C14 2 12.5 3.5 12.5 4.5C12.5 5.33 13.17 6 14 6C14.83 6 15.5 5.33 15.5 4.5C15.5 3.5 14 2 14 2Z"
+                    fill="#FFD700"
+                    className="animate-pulse"
+                    style={{ animationDuration: '1.5s' }}
+                  />
+                  {/* Candle Stick */}
+                  <rect x="13.5" y="5.5" width="1" height="2.5" fill="white" opacity="0.9" />
+                  
+                  {/* Top Layer (smallest) */}
+                  <ellipse cx="14" cy="8" rx="3.5" ry="1" fill="white" opacity="0.3" />
+                  <rect x="10.5" y="8" width="7" height="2.5" fill="white" opacity="0.95" rx="0.5" />
+                  <ellipse cx="14" cy="10.5" rx="3.5" ry="1" fill="white" opacity="0.4" />
+                  
+                  {/* Frosting Drips on Top Layer */}
+                  <path d="M11 10.5 Q11 11 10.8 11.2 L10.8 10.5 Z" fill="white" opacity="0.6" />
+                  <path d="M14 10.5 Q14 11.2 13.8 11.5 L13.8 10.5 Z" fill="white" opacity="0.6" />
+                  <path d="M17 10.5 Q17 11 16.8 11.2 L16.8 10.5 Z" fill="white" opacity="0.6" />
+                  
+                  {/* Middle Layer */}
+                  <ellipse cx="14" cy="12" rx="5" ry="1.2" fill="white" opacity="0.3" />
+                  <rect x="9" y="12" width="10" height="3.5" fill="white" opacity="0.85" rx="0.5" />
+                  <ellipse cx="14" cy="15.5" rx="5" ry="1.2" fill="white" opacity="0.4" />
+                  
+                  {/* Frosting Drips on Middle Layer */}
+                  <path d="M10 15.5 Q10 16.2 9.7 16.5 L9.7 15.5 Z" fill="white" opacity="0.5" />
+                  <path d="M14 15.5 Q14 16.5 13.6 16.8 L13.6 15.5 Z" fill="white" opacity="0.5" />
+                  <path d="M18 15.5 Q18 16.2 17.7 16.5 L17.7 15.5 Z" fill="white" opacity="0.5" />
+                  
+                  {/* Bottom Layer (largest) */}
+                  <ellipse cx="14" cy="17" rx="6.5" ry="1.5" fill="white" opacity="0.3" />
+                  <rect x="7.5" y="17" width="13" height="5" fill="white" opacity="0.75" rx="0.5" />
+                  <ellipse cx="14" cy="22" rx="6.5" ry="1.5" fill="white" opacity="0.5" />
+                  
+                  {/* Decorative Elements (berries/decorations) */}
+                  <circle cx="11" cy="13.5" r="0.7" fill="#FF69B4" opacity="0.8" />
+                  <circle cx="17" cy="13.5" r="0.7" fill="#FF69B4" opacity="0.8" />
+                  <circle cx="14" cy="9.5" r="0.6" fill="#FF1493" opacity="0.8" />
+                  <circle cx="10" cy="19" r="0.8" fill="#FF69B4" opacity="0.7" />
+                  <circle cx="18" cy="19" r="0.8" fill="#FF69B4" opacity="0.7" />
+                  <circle cx="14" cy="20" r="0.7" fill="#FF1493" opacity="0.7" />
+                  
+                  {/* Bottom Plate */}
+                  <ellipse cx="14" cy="23" rx="8" ry="1.2" fill="white" opacity="0.6" />
+                  <rect x="6" y="23" width="16" height="0.8" fill="white" opacity="0.5" rx="0.4" />
+                  <ellipse cx="14" cy="23.8" rx="8" ry="1.2" fill="white" opacity="0.3" />
+                </svg>
+              </div>
+              {/* Sparkles */}
+              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-yellow-300 rounded-full animate-ping" style={{ animationDuration: '2s' }}></div>
+              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-yellow-400 rounded-full"></div>
+            </div>
+            
+            {/* Brand Text */}
+            <div className="flex flex-col leading-tight">
+              <span className="text-base tracking-tight bg-gradient-to-r from-pink-600 via-pink-500 to-pink-600 bg-clip-text text-transparent" style={{ fontFamily: "'Great Vibes', cursive", fontWeight: 400, letterSpacing: '0.05em' }}>
+                Katrin Sweets
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}

@@ -113,7 +113,7 @@ export default function ProductQuickView({
                 onMouseLeave={() => setIsImageZoomed(false)}
               >
                 <ImageWithFallback
-                  src={product.image}
+                  src={product.image_url || product.image}
                   alt={product.name}
                   className={`w-full h-full object-cover transition-transform duration-500 ${isImageZoomed ? 'scale-110' : 'scale-100'}`}
                 />
